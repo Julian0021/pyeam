@@ -1,6 +1,5 @@
 import requests
 from datetime import date
-from get_metadata import get_metadata
 
 main_url = "https://eam.mein-portal.de/swp/eam/main.do"
 
@@ -45,23 +44,3 @@ def post_readout(session_key, metadata, readout_kwh: int):
     response.raise_for_status()
 
     return response.status_code == 200
-
-
-if __name__ == "__main__":
-    import sys
-    
-    if len(sys.argv) < 2:
-        print("Usage: python post_readout.py <readout_kwh>")
-        print("Example: python post_readout.py 449")
-        sys.exit(1)
-    
-    readout_value = sys.argv[1]
-    
-    try:
-        success = post_readout(readout_value, get_metadata())
-        if success:
-            print(f"Successfully posted readout: {readout_value} kWh")
-        else:
-            print("Failed to post readout")
-    except Exception as e:
-        print(f"Error: {e}")

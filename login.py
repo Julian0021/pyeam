@@ -1,10 +1,5 @@
 import requests
 import re
-from dotenv import load_dotenv
-
-# Load environment variables
-load_dotenv()
-
 
 def get_session_key(url, user, pwd):
     """

@@ -5,6 +5,8 @@ from login import get_session_key
 from get_metadata import get_metadata
 from post_readout import post_readout
 
+load_dotenv()
+
 
 def main(readout_kwh):
     """
@@ -17,15 +19,13 @@ def main(readout_kwh):
         readout_kwh (int or str): The meter reading in kWh
     """
     # Load environment variables
-    load_dotenv()
-    
-    main_url = "https://eam.mein-portal.de/swp/eam/main.do"
-    
-    # Step 1: Get session key
-    print("Step 1: Getting session key...")
     user = os.getenv("user")
     pwd = os.getenv("pwd")
+
+    main_url = "https://eam.mein-portal.de/swp/eam/main.do"
     
+    print("Step 1: Getting session key...")
+
     if not user or not pwd:
         raise ValueError("Environment variables 'user' and 'pwd' must be set in .env file")
     
