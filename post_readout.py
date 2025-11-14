@@ -3,7 +3,7 @@ from datetime import date
 
 main_url = "https://eam.mein-portal.de/swp/eam/main.do"
 
-def post_readout(session_key, metadata, readout_kwh: int):
+def post_readout(session_key, selected_read, readout_kwh: int):
     """
     Post meter readout to the EAM portal.
     
@@ -19,9 +19,9 @@ def post_readout(session_key, metadata, readout_kwh: int):
     """
     if readout_kwh < 0:
         raise ValueError("Readout must be a non-negative integer value")
-    
-    if not metadata.get('vkont') or not metadata.get('sernr') or not metadata.get('selected_read'):
-        raise ValueError("Required metadata not found")
+
+    if not selected_read:
+        raise ValueError("Selected read value is required")
     
     # Prepare the form data for posting readout
     today = date.today().isoformat()
@@ -30,12 +30,10 @@ def post_readout(session_key, metadata, readout_kwh: int):
         'oninputprocessing': (None, 'METER$SICHERN'),
         'p': (None, 'EAM'),
         'sessionkey': (None, session_key),
-        'timeout': (None, '86400000 '),
+        'timeout': (None, '1800000'),
         'abl_000000000010323427_001_datum': (None, today),
         'abl_000000000010323427_001_ablesungV': (None, str(readout_kwh)),
-        'vkont': (None, metadata['vkont']),
-        'sernr': (None, metadata['sernr']),
-        'selected_read': (None, metadata['selected_read'])
+        'selected_read': (None, selected_read)
     }
     
     

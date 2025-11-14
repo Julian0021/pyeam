@@ -2,7 +2,7 @@ import requests
 import re
 
 
-def get_metadata(session_key=None):
+def get_selected_read(session_key=None):
     """
     Get meter metadata from the EAM portal.
     
@@ -38,24 +38,4 @@ def get_metadata(session_key=None):
     if match:
         selected_read_value = match.group(1)
     
-    # Extract vkont value using regex
-    # Looking for: <input ... id="vkont" ... value="...">
-    vkont_value = None
-    vkont_pattern = r'<input[^>]*id=["\']vkont["\'][^>]*value=["\']([^"\']+)["\']'
-    match = re.search(vkont_pattern, html, re.IGNORECASE)
-    if match:
-        vkont_value = match.group(1)
-    
-    # Extract sernr value using regex
-    # Looking for: <input ... id="sernr" ... value="...">
-    sernr_value = None
-    sernr_pattern = r'<input[^>]*id=["\']sernr["\'][^>]*value=["\']([^"\']+)["\']'
-    match = re.search(sernr_pattern, html, re.IGNORECASE)
-    if match:
-        sernr_value = match.group(1)
-    
-    return {
-        'selected_read': selected_read_value,
-        'vkont': vkont_value,
-        'sernr': sernr_value
-    }
+    return selected_read_value

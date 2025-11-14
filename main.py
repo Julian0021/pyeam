@@ -2,7 +2,7 @@ import os
 import sys
 from dotenv import load_dotenv
 from login import get_session_key
-from get_metadata import get_metadata
+from get_metadata import get_selected_read
 from post_readout import post_readout
 
 load_dotenv()
@@ -32,18 +32,13 @@ def main(readout_kwh):
     session_key = get_session_key(main_url, user, pwd)
     print(f"✓ Session Key obtained: {session_key}")
     
-    # Step 2: Get metadata
-    print("\nStep 2: Getting metadata...")
-    metadata = get_metadata(session_key=session_key)
-    print("✓ Metadata obtained:")
-    print(f"  - selected_read: {metadata['selected_read']}")
-    print(f"  - vkont: {metadata['vkont']}")
-    print(f"  - sernr: {metadata['sernr']}")
+    print("\nStep 2: Getting selected read...")
+    selected_read = get_selected_read(session_key=session_key)
+    print(f"✓ Selected Read obtained: {selected_read}")
     
-    # Step 3: Post readout
     print(f"\nStep 3: Posting meter readout ({readout_kwh} kWh)...")
-    success = post_readout(session_key, metadata, readout_kwh)
-    
+    success = post_readout(session_key, selected_read, readout_kwh)
+
     if success:
         print(f"✓ Successfully posted readout: {readout_kwh} kWh")
         return True
