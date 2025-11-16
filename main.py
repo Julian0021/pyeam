@@ -1,9 +1,7 @@
 import os
 import sys
 from dotenv import load_dotenv
-from login import get_session_key
-from get_metadata import get_selected_read
-from post_readout import post_readout
+from eam_api import get_session_key, get_selected_read, post_readout, get_last_readout
 
 load_dotenv()
 
@@ -12,7 +10,7 @@ def main(readout_kwh):
     """
     Main function to:
     1. Get session key
-    2. Get metadata (vkont, sernr, selected_read)
+    2. Get metadata (selected_read)
     3. Post meter readout
     
     Args:
@@ -33,19 +31,25 @@ def main(readout_kwh):
     print(f"✓ Session Key obtained: {session_key}")
     
     print("\nStep 2: Getting selected read...")
-    selected_read = get_selected_read(session_key=session_key)
+    selected_read = get_selected_read(session_key, main_url)
     print(f"✓ Selected Read obtained: {selected_read}")
     
-    print(f"\nStep 3: Posting meter readout ({readout_kwh} kWh)...")
-    success = post_readout(session_key, selected_read, readout_kwh)
-
+    print("\nStep 3: Getting last readout...")
+    last_readout = get_last_readout(session_key, main_url)
+    print(f"✓ Last Readout obtained: {last_readout}")
+    
+    print("\nStep 4: Posting readout...")
+    success = post_readout(session_key, selected_read, readout_kwh, main_url)
     if success:
         print(f"✓ Successfully posted readout: {readout_kwh} kWh")
-        return True
     else:
         print("✗ Failed to post readout")
-        return False
 
+    print("\nStep 5: Verify the readout on the EAM portal to ensure it was posted correctly.")
+    if get_last_readout(session_key, main_url) == str(readout_kwh):
+        print("✓ Readout verification successful.")
+    else:
+        print("✗ Readout verification failed.")
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:

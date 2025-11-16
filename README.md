@@ -6,10 +6,10 @@ Python automation tool for posting meter readouts to EAM-Netz portal.
 
 1. Install dependencies:
 ```bash
-pip install requests python-dotenv
+pip install -r requirements.txt
 ```
 
-2. Create `.env` file:
+2. Create `.env` file in the project root:
 ```env
 user=your_username
 pwd=your_password
@@ -28,6 +28,21 @@ python main.py 449
 
 ## How it works
 
-1. Authenticates and retrieves session key
-2. Fetches metadata (vkont, sernr, selected_read)
-3. Posts meter readout to the portal
+The tool performs the following steps:
+
+1. **Authentication** - Logs in and retrieves session key
+2. **Get metadata** - Fetches selected_read value
+3. **Get last readout** - Retrieves the last submitted meter reading
+4. **Post readout** - Submits the new meter reading
+5. **Verification** - Confirms the readout was posted correctly
+
+## Project Structure
+
+- `main.py` - Main script and CLI interface
+- `eam_api.py` - API functions for EAM portal interaction
+  - `get_session_key()` - Authentication
+  - `get_selected_read()` - Fetch meter metadata
+  - `get_last_readout()` - Retrieve last reading
+  - `post_readout()` - Submit new reading
+- `.env` - Environment variables (credentials)
+- `requirements.txt` - Python dependencies
