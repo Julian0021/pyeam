@@ -36,7 +36,7 @@ def main(readout_kwh):
     
     print("\nStep 3: Getting last readout...")
     last_readout = get_last_readout(session_key, main_url)
-    print(f"✓ Last Readout obtained: {last_readout}")
+    print(f"✓ Last Readout obtained: {last_readout['value']} kWh on date {last_readout['date']}")
     
     print("\nStep 4: Posting readout...")
     success = post_readout(session_key, selected_read, readout_kwh, main_url)
