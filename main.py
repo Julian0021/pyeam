@@ -35,8 +35,8 @@ def main(readout_kwh):
     print(f"✓ Selected Read obtained: {selected_read}")
     
     print("\nStep 3: Getting last readout...")
-    last_readout = get_last_readout(session_key, main_url)
-    print(f"✓ Last Readout obtained: {last_readout['value']} kWh on date {last_readout['date']}")
+    last_value, last_date = get_last_readout(session_key, main_url)
+    print(f"✓ Last Readout obtained: {last_value} kWh on date {last_date}")
     
     print("\nStep 4: Posting readout...")
     success = post_readout(session_key, selected_read, readout_kwh, main_url)
@@ -46,7 +46,8 @@ def main(readout_kwh):
         print("✗ Failed to post readout")
 
     print("\nStep 5: Verify the readout on the EAM portal to ensure it was posted correctly.")
-    if get_last_readout(session_key, main_url) == str(readout_kwh):
+    new_value = get_last_readout(session_key, main_url)
+    if new_value == readout_kwh:
         print("✓ Readout verification successful.")
     else:
         print("✗ Readout verification failed.")
