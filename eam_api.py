@@ -137,10 +137,10 @@ def get_last_readout(session_key: str, main_url: str) -> tuple[int, str]:
 
     response = requests.post(main_url, params=params)
     response.raise_for_status()
-    last_readout_pattern = r'<td class="st-col-other-0 "> (\d{1,3}(?:\.\d{3})*|\d+)\s*kWh <\/td>'
+    last_readout_pattern = r'<td data-label=" Zählerstand "> (\d{1,3}(?:\.\d{3})*|\d+)\s*kWh </td>'
     kWh_match = re.search(last_readout_pattern, response.text)
-    
-    date_pattern = r'<td class="st-col-other-0 "> (\d{2}\.\d{2}\.\d{4}) </td>'
+
+    date_pattern = r'<td data-label=" Datum "> (\d{2}\.\d{2}\.\d{4}) </td>'
     date_match = re.search(date_pattern, response.text)
 
     if not kWh_match:
